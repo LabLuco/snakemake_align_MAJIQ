@@ -1,13 +1,13 @@
 *
-results
-results/**
+!results
+**/results/
 analysis
 analysis/*
 !analysis/README.md
 !config
-!config/*
+**/config/*
 !resources
-!resources/*
+**/resources/*
 !workflow
 !workflow/**
 !.gitignore
