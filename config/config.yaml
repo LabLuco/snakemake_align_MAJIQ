@@ -1,4 +1,14 @@
-# This file should contain everything to configure the workflow on a global scale.
-# In case of sample based data, it should be complemented by a samples.tsv file that contains
-# one row per sample. It can be parsed easily via pandas.
-samples: "config/samples.tsv"
+samples:
+  unT5_REP3_2017_R2_test : '/home/elsa/Luco_MAJIQ/snakemake_align_MAJIQ/resources/unT5_REP3_2017_R2_test.fastq.gz'
+  unT5_REP1_2017_R2_test : '/home/elsa/Luco_MAJIQ/snakemake_align_MAJIQ/resources/unT5_REP1_2017_R2_test.fastq.gz'
+  T5_REP3_2017_R2_test : '/home/elsa/Luco_MAJIQ/snakemake_align_MAJIQ/resources/T5_REP3_2017_R2_test.fastq.gz'
+  unT5_REP2_2017_R2_test : '/home/elsa/Luco_MAJIQ/snakemake_align_MAJIQ/resources/unT5_REP2_2017_R2_test.fastq.gz'
+  T5_REP3_2017_R1_test : '/home/elsa/Luco_MAJIQ/snakemake_align_MAJIQ/resources/T5_REP3_2017_R1_test.fastq.gz'
+  T5_REP1_2017_R2_test : '/home/elsa/Luco_MAJIQ/snakemake_align_MAJIQ/resources/T5_REP1_2017_R2_test.fastq.gz'
+  T5_REP2_2017_R2_test : '/home/elsa/Luco_MAJIQ/snakemake_align_MAJIQ/resources/T5_REP2_2017_R2_test.fastq.gz'
+  unT5_REP1_2017_R1_test : '/home/elsa/Luco_MAJIQ/snakemake_align_MAJIQ/resources/unT5_REP1_2017_R1_test.fastq.gz'
+  unT5_REP2_2017_R1_test : '/home/elsa/Luco_MAJIQ/snakemake_align_MAJIQ/resources/unT5_REP2_2017_R1_test.fastq.gz'
+  unT5_REP3_2017_R1_test : '/home/elsa/Luco_MAJIQ/snakemake_align_MAJIQ/resources/unT5_REP3_2017_R1_test.fastq.gz'
+  T5_REP1_2017_R1_test : '/home/elsa/Luco_MAJIQ/snakemake_align_MAJIQ/resources/T5_REP1_2017_R1_test.fastq.gz'
+  T5_REP2_2017_R1_test : '/home/elsa/Luco_MAJIQ/snakemake_align_MAJIQ/resources/T5_REP2_2017_R1_test.fastq.gz'
+date : '2021_01_13_16h43m24s'
