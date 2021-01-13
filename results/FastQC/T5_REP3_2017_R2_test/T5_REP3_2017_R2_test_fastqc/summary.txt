@@ -1,0 +1,11 @@
+PASS	Basic Statistics	T5_REP3_2017_R2_test.fastq.gz
+FAIL	Per base sequence quality	T5_REP3_2017_R2_test.fastq.gz
+PASS	Per tile sequence quality	T5_REP3_2017_R2_test.fastq.gz
+PASS	Per sequence quality scores	T5_REP3_2017_R2_test.fastq.gz
+WARN	Per base sequence content	T5_REP3_2017_R2_test.fastq.gz
+FAIL	Per sequence GC content	T5_REP3_2017_R2_test.fastq.gz
+FAIL	Per base N content	T5_REP3_2017_R2_test.fastq.gz
+PASS	Sequence Length Distribution	T5_REP3_2017_R2_test.fastq.gz
+PASS	Sequence Duplication Levels	T5_REP3_2017_R2_test.fastq.gz
+FAIL	Overrepresented sequences	T5_REP3_2017_R2_test.fastq.gz
+FAIL	Adapter Content	T5_REP3_2017_R2_test.fastq.gz
