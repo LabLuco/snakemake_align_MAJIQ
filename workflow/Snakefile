@@ -11,7 +11,8 @@ singularity: "docker://continuumio/miniconda3"
 workdir: "scripts/"
 rule all:
     input:
-        expand("../../results/FastQC/{id}/{id}_fastqc.zip", id = config['samples'])
+        expand("../../results/FastQC/{id1}_fastqc.zip", id1 = list(config['Samples'][config['Exp1']].values())),
+        expand("../../results/FastQC/{id2}_fastqc.zip", id2 = list(config['Samples'][config['Exp2']].values()))
         # The first rule should define the default target files
         # Subsequent target rules can be specified below. They should start with all_*.
 

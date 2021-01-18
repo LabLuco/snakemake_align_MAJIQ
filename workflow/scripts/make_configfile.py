@@ -9,7 +9,7 @@ import yaml
 
 def write_configsnakemake(scriptdir,fileabsdir,rep):
     fastqlist = glob.glob(fileabsdir+'/*.fastq.gz')
-    index = {}
+    index = {'Samples':{}}
 
     for file in fastqlist :
         id = file.split('/')[-1].split('.')[0]
@@ -20,21 +20,21 @@ def write_configsnakemake(scriptdir,fileabsdir,rep):
 
         condition = id.split('_')[0]
 
-        if condition not in index.keys():
-            index[condition] = {}
+        if condition not in index['Samples'].keys():
+            index['Samples'][condition] = {}
 
         for i in range(0,rep):
-            if 'REP'+str(i+1) not in index[condition].keys():
-                index[condition]['REP'+str(i+1)] = []
+            if 'REP'+str(i+1) not in index['Samples'][condition].keys():
+                index['Samples'][condition]['REP'+str(i+1)] = []
 
         for i in range(0,rep):
-            if '_REP'+str(i+1)+'_' in id and id[-2:] in ['R1','R2'] and len(index[condition]['REP'+str(i+1)]) < 3 :
-                index[condition]['REP'+str(i+1)].append(file)
+            if '_REP'+str(i+1)+'_' in id and id[-2:] in ['R1','R2'] and len(index['Samples'][condition]['REP'+str(i+1)]) < 3 :
+                index['Samples'][condition]['REP'+str(i+1)].append(file)
 
     with open(scriptdir+'/../../config/config.yaml', 'w') as outfile:
         outfile.write('NbRep: '+str(rep))
-        outfile.write('\nExp1: '+ list(index.keys())[0])
-        outfile.write('\nExp2: '+ list(index.keys())[1]+'\n')
+        outfile.write('\nExp1: '+ list(index['Samples'].keys())[0])
+        outfile.write('\nExp2: '+ list(index['Samples'].keys())[1]+'\n')
         yaml.dump(index, outfile, default_flow_style=False)
 
 if __name__ == "__main__":
