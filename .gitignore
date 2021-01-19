@@ -8,6 +8,7 @@ analysis/*
 **/config/*
 !resources
 **/resources/*
+!resources/fastq/
 !workflow
 !workflow/**
 !.gitignore

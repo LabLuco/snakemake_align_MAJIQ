@@ -8,16 +8,20 @@ type: object
 properties:
   NbRep:
     type: integer
+  Samplespaired:
+    type: object
+  Samplesname:
+    type: array
   Exp1:
     type: string
   Exp2:
     type: string
-  Samples:
-    type: object
 
 # entries that have to be in the config file for successful validation
 required:
   - NbRep
+  - Samplespaired
+  - Samplesname
   - Exp1
   - Exp2
-  - Samples
+
