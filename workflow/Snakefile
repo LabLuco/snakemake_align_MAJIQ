@@ -1,5 +1,4 @@
 include: "rules/common.smk"
-# include: "rules/fastqc.smk"
 include: "rules/trimgalore.smk"
 
 report: "report/workflow.rst"

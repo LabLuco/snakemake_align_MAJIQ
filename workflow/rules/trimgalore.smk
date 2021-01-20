@@ -8,5 +8,4 @@ rule trimgalore:
     output:
         directory(expand('../../results/trim_galore/{name}/', name = config['Samplesname']))
     script:
-        # "../scripts/exec_trimgalore.py -nbrep {{params.nbrep}} -exp1 {{params.exp1}} -exp2 {{params.exp2}}"
-        "../scripts/exec_trimgalore.py"
+        "../scripts/trimgalore.py"
