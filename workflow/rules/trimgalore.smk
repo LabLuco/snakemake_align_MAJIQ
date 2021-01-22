@@ -4,8 +4,8 @@ rule trimgalore:
         exp1 = config['Exp1'],
         exp2 = config['Exp2']
     input:
-        expand('../../resources/fastq/{id}.fastq.gz', id = config['Samplespaired'])
+        expand('../../resources/fastq/{idpaired}.fastq.gz', idpaired = config['Samplespaired'])
     output:
-        directory(expand('../../results/trim_galore/{name}/', name = config['Samplesname']))
+        expand('../../results/trim_galore/{id}/*_val*', id = config['Samplesid'])
     script:
         "../scripts/trimgalore.py"

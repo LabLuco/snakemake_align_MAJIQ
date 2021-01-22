@@ -6,12 +6,12 @@ type: object
 
 # possible entries of the config file and which type they should be
 properties:
-  NbRep:
-    type: integer
   Samplespaired:
     type: object
-  Samplesname:
+  Samplesid:
     type: array
+  NbRep:
+    type: integer
   Exp1:
     type: string
   Exp2:
@@ -19,9 +19,9 @@ properties:
 
 # entries that have to be in the config file for successful validation
 required:
-  - NbRep
   - Samplespaired
-  - Samplesname
+  - Samplesid
+  - NbRep
   - Exp1
   - Exp2
 

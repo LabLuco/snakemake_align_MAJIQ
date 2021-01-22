@@ -11,4 +11,4 @@ config/*
 /results/*
 !/results/alignment/
 !/results/trim_galore/
-
+!/results/MAJIQ/
