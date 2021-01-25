@@ -6,7 +6,6 @@ import subprocess
 
 def index(scriptdir,namelist):
     for name in namelist :
-        print(name[:-4])
         newname = name[:-4]+'.sorted.bam'
         samtoolssort = 'samtools sort '+name+' > '+newname
         sort = subprocess.Popen(samtoolssort, shell=True, stdout=subprocess.PIPE)
