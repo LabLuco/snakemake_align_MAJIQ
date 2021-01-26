@@ -4,10 +4,13 @@ include: "rules/alignment.smk"
 include: "rules/samtools_index.smk"
 include: "rules/majiq_build.smk"
 include: "rules/majiq_quantif_dpsi.smk"
+include: "rules/majiq_quantif_psi.smk"
 
 report: "report/workflow.rst"
 
 workdir: "scripts/"
 rule all:
     input:
-        directory(expand('../../results/MAJIQ/dPSI_{exp1}_{exp2}/', exp1=config['Exp1'], exp2=config['Exp2']))
+        directory(expand('../../results/MAJIQ/dPSI_{exp1}_{exp2}/', exp1=config['Exp1'], exp2=config['Exp2'])),
+        directory(expand('../../results/MAJIQ/PSI_{exp1}/', exp1=config['Exp1'])),
+        directory(expand('../../results/MAJIQ/PSI_{exp2}/',exp2=config['Exp2']))

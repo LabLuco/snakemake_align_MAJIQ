@@ -22,10 +22,11 @@ def execute_trim(rep,exp1,exp2,scriptdir):
         print(exp)
         for namerep in samples[exp] :
             id = samples[exp][namerep][0].split('/')[-1].split('.')[0][:-3]
-            if 'R1' in samples[exp][namerep][0] :
+            print(samples[exp][namerep][0])
+            if '_R1.f' in samples[exp][namerep][0] :
                 fwd = samples[exp][namerep][0]
                 rev = samples[exp][namerep][1]
-            elif 'R2' in samples[exp][namerep][0] :
+            elif '_R2.f' in samples[exp][namerep][0] :
                 fwd = samples[exp][namerep][1]
                 rev = samples[exp][namerep][0]
             run = subprocess.Popen(('trim_galore --paired --fastqc --cores 4 --output_dir '+scriptdir+'/../../results/trim_galore/'+id+' '+fwd+' '+rev),shell=True, stdout=subprocess.PIPE)
