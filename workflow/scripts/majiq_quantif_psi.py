@@ -22,12 +22,12 @@ def psi(scriptdir,majiqlist):
     print(grp1list)
     print(grp2list)
 
-    psi1command = '~/test_majiq/bin/majiq psi '+grp1list+'-n '+snakemake.params[0]+' -o'+outputdir1
-    psi1run = subprocess.Popen(dpsicommand, shell=True, stdout=subprocess.PIPE)
+    psi1command = '~/test_majiq/bin/majiq psi '+grp1list+' -n '+snakemake.params[0]+' -o'+outputdir1
+    psi1run = subprocess.Popen(psi1command, shell=True, stdout=subprocess.PIPE)
     psi1run.communicate()
 
-    psi2command = '~/test_majiq/bin/majiq psi '+grp2list+'-n '+snakemake.params[1]+' -o'+outputdir2
-    psi2run = subprocess.Popen(dpsicommand, shell=True, stdout=subprocess.PIPE)
+    psi2command = '~/test_majiq/bin/majiq psi '+grp2list+' -n '+snakemake.params[1]+' -o'+outputdir2
+    psi2run = subprocess.Popen(psi2command, shell=True, stdout=subprocess.PIPE)
     psi2run.communicate()
 
 if __name__ == "__main__":
