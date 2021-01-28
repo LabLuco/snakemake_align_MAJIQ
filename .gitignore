@@ -13,3 +13,4 @@ config/*
 !/results/trim_galore/
 !/results/MAJIQ/
 resources/MAJIQ_conf/settings.ini
+!/results/Voila/

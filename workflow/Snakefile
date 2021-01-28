@@ -6,10 +6,12 @@ include: "rules/majiq_build.smk"
 include: "rules/majiq_quantif_dpsi.smk"
 include: "rules/majiq_quantif_psi.smk"
 include: "rules/voila_tsv.smk"
+include: "rules/tpmcalculator.smk"
 
 report: "report/workflow.rst"
 
 workdir: "scripts/"
 rule all:
     input:
-        expand('../../results/Voila/{exp1}_{exp2}.tsv', exp1=config['Exp1'], exp2=config['Exp2'] )
+        expand('../../results/Voila/{exp1}_{exp2}.tsv', exp1=config['Exp1'], exp2=config['Exp2'] ),
+        directory(expand('../../results/TPM/{id}/',id = config['Samplesid']))
