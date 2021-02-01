@@ -14,3 +14,4 @@ config/*
 !/results/MAJIQ/
 resources/MAJIQ_conf/settings.ini
 !/results/Voila/
+!/results/TPM/
