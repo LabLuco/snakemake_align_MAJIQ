@@ -7,7 +7,7 @@ import glob
 import re
 import yaml
 
-def write_majiq_configfile(scriptdir):
+def write_majiq_configfile(scriptdir,genome):
     bamlist = glob.glob(scriptdir+'/../../results/alignment/*/*_Aligned.out.sorted.bam')
     bamdirlist=[]
     for i, path in enumerate(bamlist):
@@ -38,12 +38,16 @@ def write_majiq_configfile(scriptdir):
     with open(scriptdir+'/../../resources/MAJIQ_conf/settings.ini','w') as file:
         file.write('[info]\n')
         file.write('bamdirs='+bamdirlist+'\n')
-        file.write('genome=hg38\n')
+        file.write('genome='+genome+'\n')
         file.write('[experiments]\n')
         file.write(exps[0]+'='+bamexp1+'\n')
         file.write(exps[1]+'='+bamexp2)
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-g", help="Name of genome used for mapping")
+    args = parser.parse_args()
+
     scriptdir = os.path.dirname(os.path.realpath(__file__))
 
-    write_majiq_configfile(scriptdir)
+    write_majiq_configfile(scriptdir,args.g)

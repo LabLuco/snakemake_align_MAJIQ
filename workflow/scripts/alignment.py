@@ -17,7 +17,7 @@ def align(scriptdir,genomedir,namelist):
 if __name__ == "__main__":
     scriptdir = os.path.dirname(os.path.realpath(__file__))
     # genomedir = scriptdir+'../../resources/human_genome/'
-    genomedir = scriptdir+'/../../resources/chr1_human/'
+    genomedir = scriptdir+'/../../resources/genome/'
     namelist = glob.glob(scriptdir+'/../../results/trim_galore/*/')
 
     align(scriptdir,genomedir,namelist)

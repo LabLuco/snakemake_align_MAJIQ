@@ -1,9 +1,9 @@
 rule tpmcalculator:
     params:
-        id = config['Samplesid']
+        id = config['Samplesid'],
+        gtf = config['Gtf']
     input:
-        bamlist = expand('../../results/alignment/{id}/{id}_Aligned.out.sorted.bam', id = config['Samplesid']),
-        gtf = '../../resources/chr1_human/Homo_sapiens.GRCh38.102.chr.gtf'
+        bamlist = expand('../../results/alignment/{id}/{id}_Aligned.out.sorted.bam', id = config['Samplesid'])
     output:
         directory(expand('../../results/TPM/{id}/',id = config['Samplesid']))
     script:

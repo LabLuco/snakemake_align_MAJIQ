@@ -45,6 +45,17 @@ def write_configsnakemake(scriptdir):
     outfile.write('Exp1: '+ conditionlist[0])
     outfile.write('\nExp2: '+ conditionlist[1]+'\n')
 
+    gff3 = glob.glob(scriptdir+'/../../resources/genome/*.gff3')
+    print(scriptdir+'../../resources/genome/*.gff3')
+    outfile.write('Gff3: '+''.join(gff3)+'\n')
+    genome = glob.glob(scriptdir+'/../../resources/genome/*.fa*')
+    print(genome)
+    genomename = ''.join(genome).split('/')[-1].split('.')[0]
+    print(genomename)
+    outfile.write('Genome: '+genomename+'\n')
+    gtf = glob.glob(scriptdir+'/../../resources/genome/*.gtf')
+    outfile.write('Gtf: '+''.join(gtf)+'\n')
+
 if __name__ == "__main__":
     scriptdir = os.path.dirname(os.path.realpath(__file__))
 
