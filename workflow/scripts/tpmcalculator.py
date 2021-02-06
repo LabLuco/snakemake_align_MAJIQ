@@ -9,7 +9,7 @@ def tpmcalculator(scriptdir,bamlist):
 
     for bam in bamlist :
         id = bam.split('/')[-2]
-        tpmcommand = 'TPMCalculator -b '+bam+' -g '+scriptdir+'/'+snakemake.params[1]+' -q 255 -e'
+        tpmcommand = 'TPMCalculator -b '+bam+' -g '+snakemake.params[1]+' -q 255 -e'
         print(tpmcommand)
         tpm = subprocess.Popen(tpmcommand, shell=True, stdout=subprocess.PIPE)
         tpm.communicate()
