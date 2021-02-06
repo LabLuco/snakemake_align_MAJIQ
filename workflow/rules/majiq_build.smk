@@ -12,6 +12,5 @@ rule majiq_build:
     shell:
         """
         python3 ./../scripts/write_MAJIQ_configfile.py -g {params.genomename}
-        source ~/test_majiq/bin/activate
         majiq build {params.gff3} -c ../../resources/MAJIQ_conf/settings.ini -j 4 -o ../../results/MAJIQ/build_{params.exp1}_{params.exp2}/
         """
