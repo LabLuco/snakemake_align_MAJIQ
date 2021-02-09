@@ -5,8 +5,8 @@ rule majiq_build:
         gff3 = config['Gff3'],
         genomename = config['Genome']
     input:
-        # settings = '../../resources/MAJIQ_conf/settings.ini',
-        bamsorted = expand('../../results/alignment/{id}/{id}_Aligned.out.sorted.bam.bai', id = config['Samplesid'])
+        expand('../../results/alignment/{id}/{id}_Aligned.out.sorted.bam', id = config['Samplesid']),
+        expand('../../results/alignment/{id}/{id}_Aligned.out.sorted.bam.bai', id = config['Samplesid'])
     output:
         directory(expand('../../results/MAJIQ/build_{exp1}_{exp2}/', exp1=config['Exp1'], exp2=config['Exp2']))
     shell:
