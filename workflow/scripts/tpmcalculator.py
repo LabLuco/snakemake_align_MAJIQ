@@ -13,6 +13,9 @@ def tpmcalculator(scriptdir,bamlist):
         print(tpmcommand)
         tpm = subprocess.Popen(tpmcommand, shell=True, stdout=subprocess.PIPE)
         tpm.communicate()
+        mkdircommand = 'mkdir '+outputdir+id+'/'
+        mkdir = subprocess.Popen(mkdircommand, shell=True, stdout=subprocess.PIPE)
+        mkdir.communicate()
         mvcommand = 'mv *sorted_* '+outputdir+id+'/'
         mv = subprocess.Popen(mvcommand, shell=True, stdout=subprocess.PIPE)
         mv.communicate()
