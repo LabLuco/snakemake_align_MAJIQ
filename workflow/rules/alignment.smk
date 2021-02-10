@@ -6,6 +6,6 @@ rule alignment:
     input:
         expand('../../results/trim_galore/{id}/{id}_R2_val_2_fastqc.html', id = config['Samplesid'])
     output:
-        expand('../../results/alignment/{id}/{id}_Aligned.out.sam', id = config['Samplesid'])
+        expand('../../results/alignment/{id}/{id}_Log.final.out', id = config['Samplesid'])
     script:
         "../scripts/alignment.py"
