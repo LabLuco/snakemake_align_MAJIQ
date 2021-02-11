@@ -15,4 +15,8 @@ workdir: "scripts/"
 rule all:
     input:
         expand('../../results/Voila/{exp1}_{exp2}.subsetES.tsv', exp1=config['Exp1'], exp2=config['Exp2']),
-        directory(expand('../../results/TPM/{id}/',id = config['Samplesid']))
+        expand('../../results/TPM/{id}/{id}_Aligned.out.sorted_transcripts.out',id = config['Samplesid']),
+        expand('../../results/MAJIQ/PSI_{exp1}/{exp1}.psi.tsv',exp1=config['Exp1']),
+        expand('../../results/MAJIQ/PSI_{exp2}/{exp2}.psi.tsv',exp2=config['Exp2'])
+
+
