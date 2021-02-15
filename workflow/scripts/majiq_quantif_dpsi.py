@@ -10,9 +10,9 @@ def deltapsi(scriptdir,majiqlist):
     grp1list = []
     grp2list = []
     for i in majiqlist :
-        if snakemake.params[0] in i :
+        if snakemake.params[0] in i.split('/')[-1] :
             grp1list.append(i)
-        if snakemake.params[1] in i :
+        if snakemake.params[1] in i.split('/')[-1] :
             grp2list.append(i)
     
     grp1list = ' '.join(grp1list)
