@@ -43,7 +43,7 @@ def extractES(listlsv,dpsifile,voilafile):
     newname = voilafile.split('.tsv')[0]+'.subsetES.tsv'
     merge.to_csv(newname,sep='\t', header=True, index=False)
 
-def newpsifile(scriptdir,psicond1,psicond2,cond1,cond2,listlsv):
+def newpsifile(scriptdir,psicond1,psicond2,namecond1,namecond2,listlsv):
     psiconcat1 = pandas.DataFrame(listlsv, columns=['LSV ID'])
     psiconcat2 = pandas.DataFrame(listlsv, columns=['LSV ID'])
     psiconcat1 = concatpsifiles(scriptdir,psiconcat1,psicond1,namecond1)
@@ -75,4 +75,4 @@ if __name__ == "__main__":
 
     listlsv = findlsvES(dpsifile,psicond1,psicond2)
     extractES(listlsv,dpsifile,voilafile)
-    # newpsifile(scriptdir,psicond1,psicond2,namecond1,namecond2,listlsv)
+    newpsifile(scriptdir,psicond1,psicond2,namecond1,namecond2,listlsv)
