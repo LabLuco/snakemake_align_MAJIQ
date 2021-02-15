@@ -56,7 +56,7 @@ def concatpsifiles(scriptdir,dfconcat,psicond,namecond):
         repdf.rename(columns = {'E(PSI) per LSV junction':namerep.upper()+' : E(PSI) per LSV junction','StDev(E(PSI)) per LSV junction': namerep.upper()+' : StDev(E(PSI)) per LSV junction'}, inplace = True)
         dfconcat = pandas.merge(dfconcat, repdf[['LSV ID',namerep.upper()+' : E(PSI) per LSV junction',namerep.upper()+' : StDev(E(PSI)) per LSV junction']], how='left', left_on='LSV ID', right_on='LSV ID')
     
-    outputdir = scriptdir+'../../results/MAJIQ/'+namecond+'_PSI_concatenated/'
+    outputdir = scriptdir+'/../../results/MAJIQ/'+namecond+'_PSI_concatenated/'
     mkdir = subprocess.Popen('mkdir '+outputdir, shell=True, stdout=subprocess.PIPE)
     mkdir.communicate()
 
