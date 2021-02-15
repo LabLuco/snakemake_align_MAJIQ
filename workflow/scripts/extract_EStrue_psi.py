@@ -11,11 +11,13 @@ def findlsvES(dpsifile,psicond1,psicond2):
     listlsv = onlyES['LSV ID']
     listlsv = pandas.DataFrame({'LSV ID':listlsv.values})
 
-    lsvpsicond1 = pandas.read_csv(rep, sep='\t', header=0)
-    listlsv = pandas.merge(listlsv,lsvpsicond1[['LSV ID']], how ='inner', on = ['LSV ID'])
+    for rep in psicond1 :
+        lsvpsicond1 = pandas.read_csv(rep, sep='\t', header=0)
+        listlsv = pandas.merge(listlsv,lsvpsicond1[['LSV ID']], how ='inner', on = ['LSV ID'])
 
-    lsvpsicond2 = pandas.read_csv(rep, sep='\t', header=0)
-    listlsv = pandas.merge(listlsv,lsvpsicond2[['LSV ID']], how ='inner', on = ['LSV ID'])
+    for rep in psicond1 :
+        lsvpsicond2 = pandas.read_csv(rep, sep='\t', header=0)
+        listlsv = pandas.merge(listlsv,lsvpsicond2[['LSV ID']], how ='inner', on = ['LSV ID'])
 
     return listlsv
 
