@@ -65,7 +65,7 @@ def concatpsifiles(scriptdir,dfconcat,psicond,namecond):
 if __name__ == "__main__":
     scriptdir = os.path.dirname(os.path.realpath(__file__))
     namecond1 = snakemake.params[0]
-    namecond2 = snakemake.parans[1]
+    namecond2 = snakemake.params[1]
     dpsifile = scriptdir+'/../../results/MAJIQ/dPSI_'+namecond1+'_'+namecond2+'/'+namecond1+'_'+namecond2+'.deltapsi.tsv'
     voilafile = scriptdir+'/../../results/Voila/'+namecond1+'_'+namecond2+'.tsv'
 
