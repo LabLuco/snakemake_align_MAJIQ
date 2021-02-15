@@ -60,7 +60,7 @@ def psi(scriptdir,majiqlist):
 
 if __name__ == "__main__":
     scriptdir = os.path.dirname(os.path.realpath(__file__))
-    # majiqlist = glob.glob(scriptdir+'/../../results/MAJIQ/build_'+snakemake.params[0]+'_'+snakemake.params[1]+'/*.majiq')
-    majiqlist = glob.glob(scriptdir+'/test_results_MAJIQ/build_testunT5_testT5/*.majiq')
+    majiqlist = glob.glob(scriptdir+'/../../results/MAJIQ/build_'+snakemake.params[0]+'_'+snakemake.params[1]+'/*.majiq')
+    # majiqlist = glob.glob(scriptdir+'/test_results_MAJIQ/build_testunT5_testT5/*.majiq')
 
     psi(scriptdir,majiqlist)
