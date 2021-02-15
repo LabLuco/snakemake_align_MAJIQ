@@ -41,25 +41,25 @@ def extractES(listlsv,dpsifile,voilafile):
     newname = voilafile.split('.tsv')[0]+'.subsetES.tsv'
     merge.to_csv(newname,sep='\t', header=True, index=False)
 
-# def newpsifile(scriptdir,psicond1,psicond2,cond1,cond2,listlsv):
-#     psiconcat1 = pandas.DataFrame(listlsv, columns=['LSV ID'])
-#     psiconcat2 = pandas.DataFrame(listlsv, columns=['LSV ID'])
-#     psiconcat1 = concatpsifiles(scriptdir,psiconcat1,psicond1,namecond1)
-#     psiconcat2 = concatpsifiles(scriptdir,psiconcat2,psicond2,namecond2)
+def newpsifile(scriptdir,psicond1,psicond2,cond1,cond2,listlsv):
+    psiconcat1 = pandas.DataFrame(listlsv, columns=['LSV ID'])
+    psiconcat2 = pandas.DataFrame(listlsv, columns=['LSV ID'])
+    psiconcat1 = concatpsifiles(scriptdir,psiconcat1,psicond1,namecond1)
+    psiconcat2 = concatpsifiles(scriptdir,psiconcat2,psicond2,namecond2)
     
-# def concatpsifiles(scriptdir,dfconcat,psicond,namecond):
-#     for rep in psicond :
-#         namerep = os.path.basename(rep).split('.')[0]
-#         repdf = pandas.read_csv(rep, sep='\t', header=0)
-#         repdf.rename(columns = {'E(PSI) per LSV junction':namerep.upper()+' : E(PSI) per LSV junction','StDev(E(PSI)) per LSV junction': namerep.upper()+' : StDev(E(PSI)) per LSV junction'}, inplace = True)
-#         dfconcat = pandas.merge(dfconcat, repdf[['LSV ID',namerep.upper()+' : E(PSI) per LSV junction',namerep.upper()+' : StDev(E(PSI)) per LSV junction']], how='left', left_on='LSV ID', right_on='LSV ID')
+def concatpsifiles(scriptdir,dfconcat,psicond,namecond):
+    for rep in psicond :
+        namerep = os.path.basename(rep).split('.')[0]
+        repdf = pandas.read_csv(rep, sep='\t', header=0)
+        repdf.rename(columns = {'E(PSI) per LSV junction':namerep.upper()+' : E(PSI) per LSV junction','StDev(E(PSI)) per LSV junction': namerep.upper()+' : StDev(E(PSI)) per LSV junction'}, inplace = True)
+        dfconcat = pandas.merge(dfconcat, repdf[['LSV ID',namerep.upper()+' : E(PSI) per LSV junction',namerep.upper()+' : StDev(E(PSI)) per LSV junction']], how='left', left_on='LSV ID', right_on='LSV ID')
     
-#     outputdir = scriptdir+'../../results/MAJIQ/'+namecond+'_PSI_concatenated/'
-#     mkdir = subprocess.Popen('mkdir '+outputdir, shell=True, stdout=subprocess.PIPE)
-#     mkdir.communicate()
+    outputdir = scriptdir+'../../results/MAJIQ/'+namecond+'_PSI_concatenated/'
+    mkdir = subprocess.Popen('mkdir '+outputdir, shell=True, stdout=subprocess.PIPE)
+    mkdir.communicate()
 
-#     outname = namecond+'_PSI_all_rep.tsv'
-#     dfconcat.to_csv(outputdir+outname,sep='\t', header=True, index=False)
+    outname = namecond+'_PSI_all_rep.tsv'
+    dfconcat.to_csv(outputdir+outname,sep='\t', header=True, index=False)
 
 if __name__ == "__main__":
     scriptdir = os.path.dirname(os.path.realpath(__file__))
@@ -68,8 +68,8 @@ if __name__ == "__main__":
     dpsifile = scriptdir+'/../../results/MAJIQ/dPSI_'+namecond1+'_'+namecond2+'/'+namecond1+'_'+namecond2+'.deltapsi.tsv'
     voilafile = scriptdir+'/../../results/Voila/'+namecond1+'_'+namecond2+'.tsv'
 
-    psicond1 = glob.glob(scriptdir+'../../results/MAJIQ/PSI_'+namecond1+'/*.psi.tsv')
-    psicond2 = glob.glob(scriptdir+'../../results/MAJIQ/PSI_'+namecond2+'/*.psi.tsv')
+    psicond1 = glob.glob(scriptdir+'../../results/MAJIQ/PSI_'+namecond1+'/*/*.psi.tsv')
+    psicond2 = glob.glob(scriptdir+'../../results/MAJIQ/PSI_'+namecond2+'/*/*.psi.tsv')
 
     listlsv = findlsvES(dpsifile,psicond1,psicond2)
     extractES(listlsv,dpsifile,voilafile)
