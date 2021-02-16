@@ -50,6 +50,7 @@ def newpsifile(scriptdir,psicond1,psicond2,namecond1,namecond2,listlsv):
     psiconcat2 = concatpsifiles(scriptdir,psiconcat2,psicond2,namecond2)
     
 def concatpsifiles(scriptdir,dfconcat,psicond,namecond):
+    print(psicond)
     for rep in psicond :
         namerep = os.path.basename(rep).split('.')[0]
         repdf = pandas.read_csv(rep, sep='\t', header=0)
@@ -74,8 +75,8 @@ if __name__ == "__main__":
     dpsifile = scriptdir+'/../../results/MAJIQ/dPSI_'+namecond1+'_'+namecond2+'/'+namecond1+'_'+namecond2+'.deltapsi.tsv'
     voilafile = scriptdir+'/../../results/Voila/'+namecond1+'_'+namecond2+'.tsv'
 
-    psicond1 = glob.glob(scriptdir+'../../results/MAJIQ/PSI_'+namecond1+'/*/*.psi.tsv')
-    psicond2 = glob.glob(scriptdir+'../../results/MAJIQ/PSI_'+namecond2+'/*/*.psi.tsv')
+    psicond1 = glob.glob(scriptdir+'/../../results/MAJIQ/PSI_'+namecond1+'/*/*.psi.tsv')
+    psicond2 = glob.glob(scriptdir+'/../../results/MAJIQ/PSI_'+namecond2+'/*/*.psi.tsv')
 
     listlsv = findlsvES(dpsifile,psicond1,psicond2)
     extractES(listlsv,dpsifile,voilafile)
