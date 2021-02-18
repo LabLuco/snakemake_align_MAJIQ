@@ -29,7 +29,7 @@ def execute_trim(rep,exp1,exp2,scriptdir):
             elif '_R2.f' in samples[exp][namerep][0] :
                 fwd = samples[exp][namerep][1]
                 rev = samples[exp][namerep][0]
-            run = subprocess.Popen(('trim_galore --paired --fastqc --cores 4 --output_dir '+scriptdir+'/../../results/trim_galore/'+id+' '+fwd+' '+rev),shell=True, stdout=subprocess.PIPE)
+            run = subprocess.Popen(('trim_galore --paired --fastqc --cores 10 --output_dir '+scriptdir+'/../../results/trim_galore/'+id+' '+fwd+' '+rev),shell=True, stdout=subprocess.PIPE)
             run.communicate()
 if __name__ == "__main__":
     scriptdir = os.path.dirname(os.path.realpath(__file__))

@@ -11,7 +11,7 @@ def align(scriptdir,genomedir,namelist):
         fwd = name+'*1.fq.gz'
         rev = name+'*2.fq.gz'
         # starcommand = 'STAR --runThreadN 3 --genomeDir '+genomedir+' --outFileNamePrefix '+outfileprefix+' --readFilesIn '+fwd+' '+rev+' --readFilesCommand zcat --outSAMtype BAM SortedByCoordinate'
-        starcommand = 'STAR --runThreadN 2 --genomeDir '+genomedir+' --outFileNamePrefix '+outfileprefix+' --readFilesIn '+fwd+' '+rev+' --readFilesCommand zcat'
+        starcommand = 'STAR --runThreadN 10 --genomeDir '+genomedir+' --outFileNamePrefix '+outfileprefix+' --readFilesIn '+fwd+' '+rev+' --readFilesCommand zcat'
         subprocess.run((starcommand),stdout=subprocess.PIPE, stderr=subprocess.PIPE,universal_newlines=True,shell=True)
 
 if __name__ == "__main__":
