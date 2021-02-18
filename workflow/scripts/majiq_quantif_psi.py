@@ -18,9 +18,9 @@ def psi(scriptdir,majiqlist):
     grp2list = []
     
     for i in majiqlist :
-        if snakemake.params[0] in i.split('/')[-1] :
+        if re.match('^'+snakemake.params[0]+'_', i.split('/')[-1]):
             grp1list.append(i)
-        if snakemake.params[1] in i.split('/')[-1] :
+        if re.match('^'+snakemake.params[1]+'_', i.split('/')[-1]):
             grp2list.append(i)
 
     # print(majiqlist)
@@ -40,13 +40,13 @@ def psi(scriptdir,majiqlist):
 
     for rep1 in grp1list :
         rep1name = rep1.split('/')[-1].split('.')[0]
-        psi1command = 'majiq psi '+rep1+' -n '+rep1name+' -o'+outputdir1+rep1name+'/'
+        psi1command = 'majiq psi '+rep1+' -n '+rep1name+' -o '+outputdir1+rep1name+'/'
         psi1run = subprocess.Popen(psi1command, shell=True, stdout=subprocess.PIPE)
         psi1run.communicate()
 
     for rep2 in grp2list :
         rep2name = rep2.split('/')[-1].split('.')[0]
-        psi2command = 'majiq psi '+rep2+' -n '+rep2name+' -o'+outputdir2+rep2name+'/'
+        psi2command = 'majiq psi '+rep2+' -n '+rep2name+' -o '+outputdir2+rep2name+'/'
         psi2run = subprocess.Popen(psi2command, shell=True, stdout=subprocess.PIPE)
         psi2run.communicate()
 

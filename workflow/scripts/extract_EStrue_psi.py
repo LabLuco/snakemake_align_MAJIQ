@@ -21,21 +21,21 @@ def findlsvES(dpsifile,psicond1,psicond2):
 
     return listlsv
 
-def extractES(listlsv,dpsifile,voilafile):
+def extractES(listlsv,dpsifile,voilafile,namecond1,namecond2):
     dpsidf = pandas.read_csv(dpsifile, sep='\t', header=0)
     voiladf = pandas.read_csv(voilafile, sep='\t', header=0, comment='#')
     substetvoila = voiladf.loc[voiladf['lsv_id'].isin(listlsv['LSV ID'])]
 
     merge = pandas.merge(substetvoila, dpsidf, how='left', left_on='lsv_id', right_on='LSV ID')
     merge = merge.drop(['gene_id', 'lsv_id', 'mean_dpsi_per_lsv_junction','probability_changing',
-                'probability_non_changing', 'testunT5_mean_psi','testT5_mean_psi',
+                'probability_non_changing', namecond1+' E(PSI)', namecond2+' E(PSI)',
                 'lsv_type', 'num_junctions', 'num_exons','de_novo_junctions', 'seqid',
                 'junctions_coords','ir_coords','P(|dPSI|<=0.05) per LSV junction'], axis =1)
     cols = merge.columns.tolist()
 
     neworder = ['ucsc_lsv_link','gene_name','Gene ID','strand',
        'LSV ID', 'LSV Type', 'E(dPSI) per LSV junction',
-       'P(|dPSI|>=0.20) per LSV junction', 'testunT5 E(PSI)', 'testT5 E(PSI)',
+       'P(|dPSI|>=0.20) per LSV junction', namecond1+' E(PSI)', namecond2+' E(PSI)',
        'A5SS', 'A3SS', 'ES', 'Num. Junctions', 'Num. Exons',
        'Junctions coords','exons_coords','IR coords']
     merge = merge[neworder]
@@ -79,5 +79,5 @@ if __name__ == "__main__":
     psicond2 = glob.glob(scriptdir+'/../../results/MAJIQ/PSI_'+namecond2+'/*/*.psi.tsv')
 
     listlsv = findlsvES(dpsifile,psicond1,psicond2)
-    extractES(listlsv,dpsifile,voilafile)
+    extractES(listlsv,dpsifile,voilafile,namecond1,namecond2)
     newpsifile(scriptdir,psicond1,psicond2,namecond1,namecond2,listlsv)
