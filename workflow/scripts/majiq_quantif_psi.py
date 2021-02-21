@@ -3,6 +3,7 @@
 import os
 import glob
 import subprocess
+import re
 
 def psi(scriptdir,majiqlist):
     outputdir1 = scriptdir+'/../../results/MAJIQ/PSI_'+snakemake.params[0]+'/'
