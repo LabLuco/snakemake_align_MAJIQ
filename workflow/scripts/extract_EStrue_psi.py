@@ -28,7 +28,7 @@ def extractES(listlsv,dpsifile,voilafile,namecond1,namecond2):
 
     merge = pandas.merge(substetvoila, dpsidf, how='left', left_on='lsv_id', right_on='LSV ID')
     merge = merge.drop(['gene_id', 'lsv_id', 'mean_dpsi_per_lsv_junction','probability_changing',
-                'probability_non_changing', namecond1+' E(PSI)', namecond2+' E(PSI)',
+                'probability_non_changing', namecond1+'_mean_psi', namecond2+'_mean_psi',
                 'lsv_type', 'num_junctions', 'num_exons','de_novo_junctions', 'seqid',
                 'junctions_coords','ir_coords','P(|dPSI|<=0.05) per LSV junction'], axis =1)
     cols = merge.columns.tolist()
