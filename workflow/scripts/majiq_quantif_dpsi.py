@@ -7,21 +7,18 @@ import subprocess
 def deltapsi(scriptdir,majiqlist):
     outputdir = scriptdir+'/../../results/MAJIQ/dPSI_'+snakemake.params[0]+'_'+snakemake.params[1]+'/'
 
-    grp1list = []
-    grp2list = []
+    controllist = []
+    testlist = []
     for i in majiqlist :
-        if snakemake.params[0] in i.split('/')[-1] :
-            grp1list.append(i)
-        if snakemake.params[1] in i.split('/')[-1] :
-            grp2list.append(i)
+        if re.match('^'+snakemake.params[0]+'_', i.split('/')[-1]):
+            controllist.append(i)
+        elif re.match('^'+snakemake.params[1]+'_', i.split('/')[-1]) :
+            testlist.append(i)
     
-    grp1list = ' '.join(grp1list)
-    grp2list = ' '.join(grp2list)
+    controllist = ' '.join(controllist)
+    testlist = ' '.join(testlist)
 
-    print(grp1list)
-    print(grp2list)
-
-    dpsicommand = 'majiq deltapsi -grp1 '+grp1list+' -grp2 '+grp2list+' -j 10 -o'+outputdir+' -n '+snakemake.params[0]+' '+snakemake.params[1]
+    dpsicommand = 'majiq deltapsi -grp1 '+testlist+' -grp2 '+controllist+' -j 10 --min-experiments '+snakemake.params[2]+' -o '+outputdir+' -n '+snakemake.params[0]+' '+snakemake.params[1]
     dpsirun = subprocess.Popen(dpsicommand, shell=True, stdout=subprocess.PIPE)
     dpsirun.communicate()
 

@@ -21,7 +21,7 @@ properties:
 required:
   - Samplespaired
   - Samplesid
-  - NbRep
-  - Exp1
-  - Exp2
+  - NbMaxRep
+  - Control
+  - Test
 

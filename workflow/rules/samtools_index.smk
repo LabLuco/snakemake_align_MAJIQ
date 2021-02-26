@@ -1,6 +1,4 @@
 rule samtools_index:
-    # params:
-    #     id = config['Samplesid']
     input:
         expand('../../results/alignment/{id}/{id}_Log.final.out', id = config['Samplesid'])
     output:

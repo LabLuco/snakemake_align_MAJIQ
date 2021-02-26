@@ -1,8 +1,8 @@
 rule trimgalore:
     params:
-        nbrep = config['NbRep'],
-        exp1 = config['Exp1'],
-        exp2 = config['Exp2']
+        nbrep = config['NbMaxRep'],
+        control = config['Control'],
+        test = config['Test']
     input:
         expand('../../resources/fastq/{idpaired}.fastq.gz', idpaired = config['Samplespaired'])
     output:

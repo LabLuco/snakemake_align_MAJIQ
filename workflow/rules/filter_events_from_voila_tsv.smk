@@ -1,20 +1,12 @@
-include: "rules/common.smk"
-include: "rules/trimgalore.smk"
-include: "rules/alignment.smk"
-include: "rules/samtools_index.smk"
-include: "rules/majiq_build.smk"
-include: "rules/majiq_quantif_dpsi.smk"
-include: "rules/majiq_quantif_psi.smk"
-include: "rules/voila_tsv.smk"
-include: "rules/tpmcalculator.smk"
-include: "rules/filter_events_from_voila_tsv.smk"
-
-report: "report/workflow.rst"
-
-workdir: "scripts/"
-rule all:
+rule filter_events:
+    params:
+        control = config['Control'],
+        test = config['Test']
     input:
-        expand('../../results/TPM/{id}/{id}_Aligned.out.sorted_transcripts.out',id = config['Samplesid']),
+        expand('../../results/Voila/{control}_{test}.tsv', control=config['Control'], test=config['Test']),
+        directory(expand('../../results/MAJIQ/PSI_{control}/',control=config['Control'])),
+        directory(expand('../../results/MAJIQ/PSI_{test}/',test=config['Test']))
+    output:
         expand('../../results/Clean_AS_Event/ES/{control}_{test}_ES_01.tsv', control=config['Control'], test=config['Test']),
         expand('../../results/Clean_AS_Event/ES/{control}_{test}_ES_02.tsv', control=config['Control'], test=config['Test']),
         expand('../../results/Clean_AS_Event/A5SS/{control}_{test}_A5SS_01.tsv', control=config['Control'], test=config['Test']),
@@ -23,6 +15,5 @@ rule all:
         expand('../../results/Clean_AS_Event/A3SS/{control}_{test}_A3SS_02.tsv', control=config['Control'], test=config['Test']),
         expand('../../results/Clean_AS_Event/IR/{control}_{test}_IR_01.tsv', control=config['Control'], test=config['Test']),
         expand('../../results/Clean_AS_Event/IR/{control}_{test}_IR_02.tsv', control=config['Control'], test=config['Test'])
-
-
-
+    script:
+        "../scripts/filter_events_from_voila_tsv.py"

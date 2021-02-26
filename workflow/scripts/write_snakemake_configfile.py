@@ -14,7 +14,8 @@ def write_configsnakemake(scriptdir):
     outfile.write('Samplespaired:\n')
 
     idlist=[]
-    nbrep = []
+    nbrepcontrol = []
+    nbreptest = []
 
     for file in fastqlist :
         id = file.split('/')[-1].split('.')[0]
@@ -25,33 +26,43 @@ def write_configsnakemake(scriptdir):
             print('This file has a wrong name format and can not be taken for analysis : '+file)
             continue
 
-        rep = re.search('_REP[0-9]_', id).group(0)
-        if rep not in nbrep :
-            nbrep.append(rep)
+        # rep = re.search('_REP.*_', id).group(0)
+        # if rep not in nbrep :
+        #     nbrep.append(rep)
 
         condition = id.split('_')[0]
         if condition not in conditionlist:
             conditionlist.append(condition)
             if len(conditionlist)>2 :
-                print('you have more than two conditions in your experiments. Please, re-consider your files.')
+                print('you have more than two conditions in your experiments. Please, re-consider your files.') # raise error ??
                 continue
         outfile.write('    '+id+" : '"+file+"'\n")
 
     outfile.write('Samplesid:\n')
     for name in idlist :
         outfile.write('    - '+name+'\n')
+
+        if '_control_' in name and re.match('^'+conditionlist[0]+'_', name):
+            control = conditionlist[0]
+            test = conditionlist[1]
+
+            nbrepcontrol.append(name)
+        else :
+            nbreptest.append(name)
+
+    if nbrepcontrol >= nbreptest :
+        maxrep = len(nbrepcontrol)
+    else :
+        maxrep = len(nbreptest)
     
-    outfile.write('NbRep: '+str(len(nbrep))+'\n')
-    outfile.write('Exp1: '+ conditionlist[0])
-    outfile.write('\nExp2: '+ conditionlist[1]+'\n')
+    outfile.write('NbMaxRep: '+str(maxrep)+'\n')
+    outfile.write('Control: '+control)
+    outfile.write('\nTest: '+test+'\n')
 
     gff3 = glob.glob(scriptdir+'/../../resources/genome/*.gff3')
-    print(scriptdir+'../../resources/genome/*.gff3')
     outfile.write('Gff3: '+''.join(gff3)+'\n')
     genome = glob.glob(scriptdir+'/../../resources/genome/*.fa*')
-    print(genome)
     genomename = ''.join(genome).split('/')[-1].split('.')[0]
-    print(genomename)
     outfile.write('Genome: '+genomename+'\n')
     gtf = glob.glob(scriptdir+'/../../resources/genome/*.gtf')
     outfile.write('Gtf: '+''.join(gtf)+'\n')

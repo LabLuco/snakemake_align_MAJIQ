@@ -18,7 +18,6 @@ def index(scriptdir,namelist):
 
 if __name__ == "__main__":
     scriptdir = os.path.dirname(os.path.realpath(__file__))
-    # namelist = glob.glob(scriptdir+'/../../results/alignment/'+snakemake.params[0]+'/'+snakemake.params[0]+'_Aligned.out.sam')
     namelist = glob.glob(scriptdir+'/../../results/alignment/*/*_Aligned.out.sam')
 
     index(scriptdir,namelist)

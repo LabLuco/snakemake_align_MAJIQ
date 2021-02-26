@@ -3,12 +3,12 @@ import os
 import glob
 import subprocess
 
-def execute_trim(rep,exp1,exp2,scriptdir):
+def execute_trim(rep,control,test,scriptdir):
     fastqlist = glob.glob(scriptdir+'/../../resources/fastq/*.fastq.gz')
-    samples = {exp1 :{}, exp2:{}}
+    samples = {control :{}, test:{}}
     for i in range(0,rep):
-        samples[exp1]['REP'+str(i+1)] = []
-        samples[exp2]['REP'+str(i+1)] = []
+        samples[control]['REP'+str(i+1)] = []
+        samples[test]['REP'+str(i+1)] = []
 
     for file in fastqlist :
         id = file.split('/')[-1].split('.')[0]
@@ -19,7 +19,6 @@ def execute_trim(rep,exp1,exp2,scriptdir):
                 samples[condition]['REP'+str(i+1)].append(file)
 
     for exp in samples.keys():
-        print(exp)
         for namerep in samples[exp] :
             id = samples[exp][namerep][0].split('/')[-1].split('.')[0][:-3]
             print(samples[exp][namerep][0])

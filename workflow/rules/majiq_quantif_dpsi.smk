@@ -1,10 +1,11 @@
 rule majiq_quantif_dpsi:
     params:
-        exp1 = config['Exp1'],
-        exp2 = config['Exp2']
+        control = config['Control'],
+        test = config['Test'],
+        nbrep = config['NbMaxRep']
     input:
-        directory(expand('../../results/MAJIQ/build_{exp1}_{exp2}/', exp1=config['Exp1'], exp2=config['Exp2'])),
+        directory(expand('../../results/MAJIQ/build_{control}_{test}/', control=config['Control'], test=config['Test'])),
     output:
-        directory(expand('../../results/MAJIQ/dPSI_{exp1}_{exp2}/', exp1=config['Exp1'], exp2=config['Exp2']))
+        directory(expand('../../results/MAJIQ/dPSI_{control}_{test}/', control=config['Control'], test=config['Test']))
     script:
         "../scripts/majiq_quantif_dpsi.py"
