@@ -47,6 +47,9 @@ def write_configsnakemake(scriptdir):
             test = conditionlist[1]
 
             nbrepcontrol.append(name)
+        elif '_control_' in name and re.match('^'+conditionlist[1]+'_', name):
+            control = conditionlist[1]
+            test = conditionlist[0]
         else :
             nbreptest.append(name)
 
