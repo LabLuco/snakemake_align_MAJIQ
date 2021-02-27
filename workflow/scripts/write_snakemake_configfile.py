@@ -39,6 +39,9 @@ def write_configsnakemake(scriptdir):
         outfile.write('    '+id+" : '"+file+"'\n")
 
     outfile.write('Samplesid:\n')
+
+    control=''
+    test=''
     for name in idlist :
         outfile.write('    - '+name+'\n')
 
