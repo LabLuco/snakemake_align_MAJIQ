@@ -15,5 +15,12 @@ rule filter_events:
         expand('../../results/Clean_AS_Event/A3SS/{control}_{test}_A3SS_02.tsv', control=config['Control'], test=config['Test']),
         expand('../../results/Clean_AS_Event/IR/{control}_{test}_IR_01.tsv', control=config['Control'], test=config['Test']),
         expand('../../results/Clean_AS_Event/IR/{control}_{test}_IR_02.tsv', control=config['Control'], test=config['Test'])
-    script:
-        "../scripts/filter_events_from_voila_tsv.py"
+    shell:
+        """
+        mkdir ../../results/Clean_AS_Event/
+        mkdir ../../results/Clean_AS_Event/ES/
+        mkdir ../../results/Clean_AS_Event/A5SS/
+        mkdir ../../results/Clean_AS_Event/A3SS/
+        mkdir ../../results/Clean_AS_Event/IR/
+        python ./../scripts/filter_events_from_voila_tsv.py
+        """

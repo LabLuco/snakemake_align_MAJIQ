@@ -35,6 +35,9 @@ def extract_events(voilatsv,cond1,cond2):
         lsvsplit = lsvtype.split('|')
         target = lsvsplit[0]
 
+        if 'na' in lsvsplit :
+            continue
+
         if target == 't' :
             listB = []
             listC = []
@@ -179,30 +182,30 @@ def remove_low_dpsi_and_proba(fulldf,threshholddpsi,threshholdproba):
 def get_only_X_event(cond1,cond2,fulldf1,fulldf2,eventtype,outputdir):
     if eventtype == 'ES' :
         dfES1 = fulldf1[fulldf1['ES'] == 'TRUE']
-        dfES1.to_csv(outputdir+'ES/'+control'_'+test+'_ES_01.tsv',header=1, sep='\t',index=False)
+        dfES1.to_csv(outputdir+'ES/'+control+'_'+test+'_ES_01.tsv',header=1, sep='\t',index=False)
 
         dfES2 = fulldf2[fulldf2['ES'] == 'TRUE']
-        dfES2.to_csv(outputdir+'ES/'+control'_'+test+'_ES_02.tsv',header=1, sep='\t',index=False)
+        dfES2.to_csv(outputdir+'ES/'+control+'_'+test+'_ES_02.tsv',header=1, sep='\t',index=False)
     elif eventtype == 'A5SS' :
         dfA5SS1 = fulldf1[fulldf1['A5SS'] == 'TRUE']
-        dfA5SS1.to_csv(outputdir+'A5SS/'+control'_'+test+'_A5SS_01.tsv',header=1, sep='\t',index=False)
+        dfA5SS1.to_csv(outputdir+'A5SS/'+control+'_'+test+'_A5SS_01.tsv',header=1, sep='\t',index=False)
 
         dfA5SS2 = fulldf2[fulldf2['A5SS'] == 'TRUE']
-        dfA5SS2.to_csv(outputdir+'A5SS/'+control'_'+test+'_A5SS_02.tsv',header=1, sep='\t',index=False)
+        dfA5SS2.to_csv(outputdir+'A5SS/'+control+'_'+test+'_A5SS_02.tsv',header=1, sep='\t',index=False)
         
     elif eventtype == 'A3SS' :
         dfA3SS1 = fulldf1[fulldf1['A3SS'] == 'TRUE']
-        dfA3SS1.to_csv(outputdir+'A3SS/'+control'_'+test+'_A3SS_01.tsv',header=1, sep='\t',index=False)
+        dfA3SS1.to_csv(outputdir+'A3SS/'+control+'_'+test+'_A3SS_01.tsv',header=1, sep='\t',index=False)
 
         dfA3SS2 = fulldf2[fulldf2['A3SS'] == 'TRUE']
-        dfA3SS2.to_csv(outputdir+'A3SS/'+control'_'+test+'_A3SS_02.tsv',header=1, sep='\t',index=False)
+        dfA3SS2.to_csv(outputdir+'A3SS/'+control+'_'+test+'_A3SS_02.tsv',header=1, sep='\t',index=False)
         
     elif eventtype == 'IR' :
         dfIR1 = fulldf1[fulldf1['IR'] == 'TRUE']
-        dfIR1.to_csv(outputdir+'IR/'+control'_'+test+'_IR_01.tsv',header=1, sep='\t',index=False)
+        dfIR1.to_csv(outputdir+'IR/'+control+'_'+test+'_IR_01.tsv',header=1, sep='\t',index=False)
 
         dfIR2 = fulldf2[fulldf2['IR'] == 'TRUE']
-        dfIR2.to_csv(outputdir+'IR/'+control'_'+test+'_IR_02.tsv',header=1, sep='\t',index=False)
+        dfIR2.to_csv(outputdir+'IR/'+control+'_'+test+'_IR_02.tsv',header=1, sep='\t',index=False)
         
 
 if __name__ == "__main__":
@@ -224,6 +227,6 @@ if __name__ == "__main__":
 
     get_only_X_event(control,test,fulldf1,fulldf2,'ES',outputdir)
     get_only_X_event(control,test,fulldf1,fulldf2,'A5SS',outputdir)
-    get_only_X_event(control,test,fulldf1,fulldf2,'A3SS'outputdir)
+    get_only_X_event(control,test,fulldf1,fulldf2,'A3SS',outputdir)
 
     get_only_X_event(control,test,fulldfir1,fulldfir2,'IR',outputdir)
