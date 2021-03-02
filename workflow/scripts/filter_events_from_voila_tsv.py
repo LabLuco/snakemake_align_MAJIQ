@@ -11,7 +11,7 @@ def initdf(cond1,cond2):
             'mean_dpsi_per_lsv_junction','probability_changing',
             'probability_non_changing',cond1+'_mean_psi',
             cond2+'_mean_psi','de_novo_junctions',
-            'strand','place_constitutive_exon','junctions_coords',
+            'strand','place_constitutive_exon','seqid','junctions_coords',
             'ES','A5SS','A3SS'])
     return newdf
 
@@ -20,7 +20,7 @@ def initdfIR(cond1,cond2):
             'mean_dpsi_per_lsv_junction','probability_changing',
             'probability_non_changing',cond1+'_mean_psi',
             cond2+'_mean_psi','de_novo_junctions',
-            'strand','place_constitutive_exon','junctions_coords',
+            'strand','place_constitutive_exon','seqid',junctions_coords',
             'ir_coords','IR'])
     return newdf
 
@@ -79,6 +79,7 @@ def extract_events(voilatsv,cond1,cond2):
                 dfevent.loc[0,'de_novo_junctions'] = row['de_novo_junctions'].split(';')[index-1] # A CHANGER EN BOOL PLUS TARD
                 dfevent.loc[0,'strand'] = row['strand']
                 dfevent.loc[0,'place_constitutive_exon'] = 'TARGET'
+                dfevent.loc[0,'seqid'] = row['seqid']
                 dfevent.loc[0,'junctions_coords'] = row['junctions_coords'].split(';')[index-1]
 
                 if lsvsplit[index] != 'i':
@@ -144,6 +145,7 @@ def extract_events(voilatsv,cond1,cond2):
                 dfevent.loc[0,'de_novo_junctions'] = row['de_novo_junctions'].split(';')[index-1] # A CHANGER EN BOOL PLUS TARD ?
                 dfevent.loc[0,'strand'] = row['strand']
                 dfevent.loc[0,'place_constitutive_exon'] = 'SOURCE'
+                dfevent.loc[0,'seqid'] = row['seqid']
                 dfevent.loc[0,'junctions_coords'] = row['junctions_coords'].split(';')[index-1]
 
                 if lsvsplit[index] != 'i':
