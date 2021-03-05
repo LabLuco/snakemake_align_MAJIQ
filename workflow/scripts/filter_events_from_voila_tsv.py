@@ -186,7 +186,8 @@ def remove_low_dpsi_and_proba(fulldf,threshholddpsi,threshholdproba):
     return fulldf
 
 def remove_duplicates(df):
-    df = df.sort_values(by=['junction_coords']).drop_duplicates(subset=['gene_name', 'junction_coords'])
+    df = (df.assign(abs=df['mean_dpsi_per_lsv_junction'].abs()).sort_values(['junction_coords','abs'],ascending=[True, True]).drop('abs', 1))
+    df = df.drop_duplicates(subset=['gene_name', 'junction_coords'], keep='first')
     return df
 
 def get_only_X_event(cond1,cond2,fulldf1,fulldf2,eventtype,outputdir):
