@@ -171,7 +171,11 @@ def extract_events(voilatsv,cond1,cond2):
                     fulldfir = pandas.concat([fulldfir,dfevent])
                 else :
                     fulldf = pandas.concat([fulldf,dfevent])
-
+                    
+    fulldf['junction_coords'] = fulldf[['seqid', 'junctions_coords']].agg(':'.join, axis=1)
+    fulldfir['junction_coords'] = fulldfir[['seqid', 'junctions_coords']].agg(':'.join, axis=1)
+    fulldf.drop(['seqid', 'junctions_coords'], axis=1)
+    fulldfir.drop(['seqid', 'junctions_coords'], axis=1)
     return fulldf,fulldfir
 
 def remove_low_dpsi_and_proba(fulldf,threshholddpsi,threshholdproba):
@@ -181,34 +185,45 @@ def remove_low_dpsi_and_proba(fulldf,threshholddpsi,threshholdproba):
     fulldf = fulldf[fulldf['probability_changing'] > threshholdproba]
     return fulldf
 
+def remove_duplicates(df):
+    df = df.sort_values(by=['junction_coords']).drop_duplicates(subset=['gene_name', 'junction_coords'])
+    return df
+
 def get_only_X_event(cond1,cond2,fulldf1,fulldf2,eventtype,outputdir):
     if eventtype == 'ES' :
         dfES1 = fulldf1[fulldf1['ES'] == 'TRUE']
+        dfES1 = remove_duplicates(dfES1)
         dfES1.to_csv(outputdir+'ES/'+control+'_'+test+'_ES_01.tsv',header=1, sep='\t',index=False)
 
         dfES2 = fulldf2[fulldf2['ES'] == 'TRUE']
+        dfES2 = remove_duplicates(dfES2)
         dfES2.to_csv(outputdir+'ES/'+control+'_'+test+'_ES_02.tsv',header=1, sep='\t',index=False)
     elif eventtype == 'A5SS' :
         dfA5SS1 = fulldf1[fulldf1['A5SS'] == 'TRUE']
+        dfA5SS1 = remove_duplicates(dfA5SS1)
         dfA5SS1.to_csv(outputdir+'A5SS/'+control+'_'+test+'_A5SS_01.tsv',header=1, sep='\t',index=False)
 
         dfA5SS2 = fulldf2[fulldf2['A5SS'] == 'TRUE']
+        dfA5SS2 = remove_duplicates(dfA5SS2)
         dfA5SS2.to_csv(outputdir+'A5SS/'+control+'_'+test+'_A5SS_02.tsv',header=1, sep='\t',index=False)
         
     elif eventtype == 'A3SS' :
         dfA3SS1 = fulldf1[fulldf1['A3SS'] == 'TRUE']
+        dfA3SS1 = remove_duplicates(dfA3SS1)
         dfA3SS1.to_csv(outputdir+'A3SS/'+control+'_'+test+'_A3SS_01.tsv',header=1, sep='\t',index=False)
 
         dfA3SS2 = fulldf2[fulldf2['A3SS'] == 'TRUE']
+        dfA3SS2 = remove_duplicates(dfA3SS2)
         dfA3SS2.to_csv(outputdir+'A3SS/'+control+'_'+test+'_A3SS_02.tsv',header=1, sep='\t',index=False)
         
     elif eventtype == 'IR' :
         dfIR1 = fulldf1[fulldf1['IR'] == 'TRUE']
+        dfIR1 = remove_duplicates(dfIR1)
         dfIR1.to_csv(outputdir+'IR/'+control+'_'+test+'_IR_01.tsv',header=1, sep='\t',index=False)
 
         dfIR2 = fulldf2[fulldf2['IR'] == 'TRUE']
+        dfIR2 = remove_duplicates(dfIR2)
         dfIR2.to_csv(outputdir+'IR/'+control+'_'+test+'_IR_02.tsv',header=1, sep='\t',index=False)
-        
 
 if __name__ == "__main__":
     scriptdir = os.path.dirname(os.path.realpath(__file__))
