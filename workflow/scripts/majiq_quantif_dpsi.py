@@ -19,7 +19,7 @@ def deltapsi(scriptdir,majiqlist):
     controllist = ' '.join(controllist)
     testlist = ' '.join(testlist)
 
-    dpsicommand = 'majiq deltapsi -grp1 '+testlist+' -grp2 '+controllist+' -j 10 --min-experiments '+str(snakemake.params[2])+' -o '+outputdir+' -n '+snakemake.params[1]+' '+snakemake.params[0]
+    dpsicommand = 'majiq deltapsi -grp1 '+controllist+' -grp2 '+testlist+' -j 10 --min-experiments '+str(snakemake.params[2])+' -o '+outputdir+' -n '+snakemake.params[0]+' '+snakemake.params[1]
     dpsirun = subprocess.Popen(dpsicommand, shell=True, stdout=subprocess.PIPE)
     dpsirun.communicate()
 
