@@ -25,7 +25,7 @@ def initdfIR(cond1,cond2):
     return newdf
 
 
-def extract_events(voilatsv,cond1,cond2):
+def extract_events(voilatsv,cond1,cond2,deseq):
     fulldf = initdf(cond1,cond2)
     fulldfir = initdfIR(cond1,cond2)
 
@@ -174,8 +174,14 @@ def extract_events(voilatsv,cond1,cond2):
                     
     fulldf['junction_coords'] = fulldf[['seqid', 'junctions_coords']].agg(':'.join, axis=1)
     fulldfir['junction_coords'] = fulldfir[['seqid', 'junctions_coords']].agg(':'.join, axis=1)
-    fulldf.drop(['seqid', 'junctions_coords'], axis=1)
-    fulldfir.drop(['seqid', 'junctions_coords'], axis=1)
+    fulldf = fulldf.drop(['seqid', 'junctions_coords'], axis=1)
+    fulldfir = fulldfir.drop(['seqid', 'junctions_coords'], axis=1)
+
+    deseq = deseq.drop(['V3'],axis=1)
+
+    fulldf = pandas.merge(fulldf,deseq,how='inner',left_on='gene_id',right_on='V2')
+    fulldfir = pandas.merge(fulldfir,deseq,how='inner',left_on='gene_id',right_on='V2')
+
     return fulldf,fulldfir
 
 def remove_low_dpsi_and_proba(fulldf,threshholddpsi,threshholdproba):
@@ -232,8 +238,10 @@ if __name__ == "__main__":
     test = snakemake.params[1]
     voilafile = scriptdir+'/../../results/Voila/'+control+'_'+test+'.tsv'
     voilatsv = pandas.read_csv(voilafile, header=0, comment='#', sep='\t')
+    deseqfile = scriptdir+'/../../results/Diff_Exp/raw_counts_matrix.filtered.tsv'
+    deseq = pandas.read_csv(deseqfile,header=0,sep='\t')
 
-    fulldf,fulldfir = extract_events(voilatsv,control,test)
+    fulldf,fulldfir = extract_events(voilatsv,control,test,deseq)
 
     fulldf1 = remove_low_dpsi_and_proba(fulldf,0.1,0.9)
     fulldf2 = remove_low_dpsi_and_proba(fulldf,0.2,0.9)
