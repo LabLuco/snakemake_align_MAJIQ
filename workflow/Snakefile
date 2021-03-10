@@ -7,6 +7,7 @@ include: "rules/majiq_quantif_dpsi.smk"
 include: "rules/majiq_quantif_psi.smk"
 include: "rules/voila_tsv.smk"
 include: "rules/tpmcalculator.smk"
+include: "rules/deseq2.smk"
 include: "rules/filter_events_from_voila_tsv.smk"
 
 report: "report/workflow.rst"
