@@ -45,12 +45,12 @@ def write_configsnakemake(scriptdir):
     for name in idlist :
         outfile.write('    - '+name+'\n')
 
-        if '_control_' in name and re.match('^'+conditionlist[0]+'_', name):
+        if '_control' in name and re.match('^'+conditionlist[0]+'_', name):
             control = conditionlist[0]
             test = conditionlist[1]
 
             nbrepcontrol.append(name)
-        elif '_control_' in name and re.match('^'+conditionlist[1]+'_', name):
+        elif '_control' in name and re.match('^'+conditionlist[1]+'_', name):
             control = conditionlist[1]
             test = conditionlist[0]
         else :
