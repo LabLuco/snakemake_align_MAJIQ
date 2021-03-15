@@ -11,7 +11,7 @@ def initdf(cond1,cond2):
             'mean_dpsi_per_lsv_junction','probability_changing',
             'probability_non_changing',cond1+'_mean_psi',
             cond2+'_mean_psi','de_novo_junctions',
-            'strand','place_constitutive_exon','seqid','junctions_coords',
+            'strand','place_constitutive_exon','seqid','junctions_coords','skipped_exons_coords',
             'ES','A5SS','A3SS'])
     return newdf
 
@@ -96,6 +96,8 @@ def extract_events(voilatsv,cond1,cond2,deseq):
 
                     if b != maxB :
                         dfevent.loc[0,'ES'] = 'TRUE'
+                        skippedex = [row['seqid']+':' + s for s in row['exons_coords'].split(';')[1:-b]]
+                        dfevent.loc[0,'skipped_exons_coords'] = ' '.join(skippedex)
                     if d != 1 and c != maxD and listB.count(b) > 1 and diffc == True :
                         dfevent.loc[0,'A5SS'] = 'TRUE'
                     if a != 1 :
@@ -162,6 +164,8 @@ def extract_events(voilatsv,cond1,cond2,deseq):
 
                     if b != 1 :
                         dfevent.loc[0,'ES'] = 'TRUE'
+                        skippedex = [row['seqid']+':'+ s for s in row['exons_coords'].split(';')[1:b]]
+                        dfevent.loc[0,'skipped_exons_coords'] = ' '.join(skippedex)
                     if a != maxA :
                         dfevent.loc[0,'A5SS'] = 'TRUE'
                     if d != 1 and c != 1 and listB.count(b) > 1 and diffc == True:
@@ -181,6 +185,8 @@ def extract_events(voilatsv,cond1,cond2,deseq):
 
     fulldf = pandas.merge(fulldf,deseq,how='inner',left_on='gene_id',right_on='V2')
     fulldfir = pandas.merge(fulldfir,deseq,how='inner',left_on='gene_id',right_on='V2')
+    fulldf = fulldf.drop(['V2'],axis=1)
+    fulldfir = fulldfir.drop(['V2'],axis=1)
 
     return fulldf,fulldfir
 
