@@ -1,6 +1,7 @@
 import glob
 import re
 import pandas as pd
+import os
 
 def write_samplesheet(scriptdir,totest):
     samples = {'sample_name':[],'condition':[]} 
