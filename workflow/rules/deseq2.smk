@@ -13,6 +13,6 @@ rule deseq2:
         """
         mkdir -p ../../results/Diff_Exp/
         bash ../scripts/get_count_from_star.sh {params.gtf}
-        python3 ./../scripts/samplesheet_and_keep_gene_interest.py
+        python3 ./../scripts/samplesheet_and_keep_gene_interest.py -control {params.control} -test {params.test}
         Rscript ./../scripts/deseq2.R
         """

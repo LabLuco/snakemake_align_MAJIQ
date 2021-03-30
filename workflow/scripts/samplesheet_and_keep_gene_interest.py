@@ -2,6 +2,7 @@ import glob
 import re
 import pandas as pd
 import os
+import argparse
 
 def write_samplesheet(scriptdir,totest):
     samples = {'sample_name':[],'condition':[]} 
@@ -24,8 +25,15 @@ def extract_gene_interest(scriptdir,interest,totest):
     totest.to_csv(scriptdir+'/../../results/Diff_Exp/raw_counts_matrix.filtered.tsv',header=1,sep='\t',index=False)
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-control',help='string for control condition name')
+    parser.add_argument('-test',help='string for test condition name')
+    args = parser.parse_args()
+    control = args.control
+    test = args.test
+
     scriptdir = os.path.dirname(os.path.realpath(__file__))
-    interest = pd.read_csv(scriptdir+'/../../results/Voila/'+snakemake.params[0]+'_'+snakemake.params[1]+'.tsv',header=0,sep='\t',comment='#')
+    interest = pd.read_csv(scriptdir+'/../../results/Voila/'+control+'_'+test+'.tsv',header=0,sep='\t',comment='#')
     totest = pd.read_csv(scriptdir+'/../../results/Diff_Exp/raw_counts_matrix.tsv',header=0,sep='\t')
 
     write_samplesheet(scriptdir,totest)
