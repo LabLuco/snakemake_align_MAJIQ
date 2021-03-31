@@ -37,4 +37,4 @@ if __name__ == "__main__":
     totest = pd.read_csv(scriptdir+'/../../results/Diff_Exp/raw_counts_matrix.tsv',header=0,sep='\t')
 
     write_samplesheet(scriptdir,totest)
-    extract_gene_interest(interest,totest)
+    extract_gene_interest(scriptdir,interest,totest)
