@@ -1,5 +1,10 @@
 setwd("./../../results/Diff_Exp/")
 
+library(S4Vectors, lib.loc='/usr/local/lib/R/site-library/')
+require(devtools)
+if (identical(require("S4Vectors"),FALSE)) {BiocManager::install('S4Vectors')}
+if (identical(packageVersion('S4Vectors')>='0.12.2',FALSE)) {BiocManager::install('S4Vectors')}
+install_version("S4Vectors", version = "0.24.4", repos = "http://cran.us.r-project.org")
 library(DESeq2)
 
 sampletable <- read.table("samplesheet.tsv", header=T, sep="\t")
