@@ -1,6 +1,6 @@
 setwd("./../../results/Diff_Exp/")
 
-library(DESeq2, lib.loc='/usr/local/lib/R/site-library/')
+library(DESeq2, lib.loc='/usr/lib/R/library')
 
 sampletable <- read.table("samplesheet.tsv", header=T, sep="\t")
 rownames(sampletable) <- sampletable$sample_name
