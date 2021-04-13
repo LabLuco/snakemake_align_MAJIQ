@@ -1,5 +1,7 @@
 setwd("./../../results/Diff_Exp/")
 
+library(BiocGenerics, lib.loc='/usr/lib/R/library')
+library(S4Vectors, lib.loc='/usr/lib/R/library')
 library(DESeq2, lib.loc='/usr/lib/R/library')
 
 sampletable <- read.table("samplesheet.tsv", header=T, sep="\t")
