@@ -1,5 +1,8 @@
 setwd("./../../results/Diff_Exp/")
 
+library(SummarizedExperiment, lib.loc='/usr/lib/R/library')
+library(GenomicRanges, lib.loc='/usr/lib/R/library')
+library(IRanges, lib.loc='/usr/lib/R/library')
 library(BiocGenerics, lib.loc='/usr/lib/R/library')
 library(S4Vectors, lib.loc='/usr/lib/R/library')
 library(DESeq2, lib.loc='/usr/lib/R/library')
