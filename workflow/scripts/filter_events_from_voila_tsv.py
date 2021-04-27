@@ -6,6 +6,38 @@ import re
 # LSV TYPE may be composed of various splicing events defined as : AeB.CoD
 # LSV TYPE may contain an intro which is specified at the end such as : ...|i
 
+def main():
+    scriptdir = os.path.dirname(os.path.realpath(__file__))
+    control = snakemake.params[0]
+    test = snakemake.params[1]
+    voilafile = scriptdir+'/../../results/Voila/'+control+'_'+test+'.tsv'
+    voilatsv = pandas.read_csv(voilafile, header=0, comment='#', sep='\t')
+    deseqfile = scriptdir+'/../../results/Diff_Exp/raw_counts_matrix.filtered.tsv'
+    deseq = pandas.read_csv(deseqfile,header=0,sep='\t')
+    majiqfiles = glob.glob(scriptdir+'/../../results/MAJIQ/build_'+control+'_'+test+'/*.majiq')
+
+    fulldf,fulldfir = extract_events(voilatsv,control,test,deseq)
+
+    fulldf1 = remove_low_dpsi_and_proba(fulldf,0.1,0.9)
+    fulldf2 = remove_low_dpsi_and_proba(fulldf,0.2,0.9)
+    fulldfir1 = remove_low_dpsi_and_proba(fulldfir,0.1,0.9)
+    fulldfir2 = remove_low_dpsi_and_proba(fulldfir,0.2,0.9)
+
+    allrep,controlcol,testcol = explore_majiq_files(control,test,majiqfiles)
+
+    fulldf1 = add_reads(control,test,allrep,controlcol,testcol,fulldf1)
+    fulldf2 = add_reads(control,test,allrep,controlcol,testcol,fulldf2)
+    fulldfir1 = add_reads(control,test,allrep,controlcol,testcol,fulldfir1,'IR')
+    fulldfir2 = add_reads(control,test,allrep,controlcol,testcol,fulldfir2,'IR')
+
+    outputdir = scriptdir+'/../../results/Clean_AS_Event/'
+
+    get_only_X_event(control,test,fulldf1,fulldf2,'ES',outputdir)
+    get_only_X_event(control,test,fulldf1,fulldf2,'A5SS',outputdir)
+    get_only_X_event(control,test,fulldf1,fulldf2,'A3SS',outputdir)
+
+    get_only_X_event(control,test,fulldfir1,fulldfir2,'IR',outputdir)
+
 def initdf(cond1,cond2):
     newdf = pandas.DataFrame(columns=['gene_name','gene_id','lsv_id',
             'mean_dpsi_per_lsv_junction','probability_changing',
@@ -20,7 +52,7 @@ def initdfIR(cond1,cond2):
             'mean_dpsi_per_lsv_junction','probability_changing',
             'probability_non_changing',cond1+'_mean_psi',
             cond2+'_mean_psi','de_novo_junctions',
-            'strand','place_constitutive_exon','seqid',junctions_coords',
+            'strand','place_constitutive_exon','seqid','junctions_coords',
             'ir_coords','IR'])
     return newdf
 
@@ -202,7 +234,98 @@ def remove_duplicates(df):
     df = df.drop_duplicates(subset=['gene_name', 'junction_coords'], keep='first')
     return df
 
-def get_only_X_event(cond1,cond2,fulldf1,fulldf2,eventtype,outputdir):
+
+def explore_majiq_files(control,test,majiqfiles):
+    controllist = []
+    testlist = []
+    allrep = {}
+
+    ## get all events and their reads in one dic ##
+    for file in majiqfiles :
+        namerep = file.split('/')[-1].split('.majiq')[0]
+
+        arrayrep = np.load(file)['junc_info']
+        dfrep = pd.DataFrame.from_records(arrayrep,columns=[])
+        dfrep.columns = ['lsv_id','start','end','reads_'+namerep,'positions']
+        dfrep['lsv_id'] = dfrep['lsv_id'].map(lambda x: x.decode('UTF-8'))
+        # dfrep['reads_'+namerep] = dfrep['reads_'+namerep].astype(int).astype(str)
+        # print(dfrep['reads_'+namerep].dtype)
+
+        allrep[namerep] = dfrep
+        if '_control' in namerep and re.match('^'+control+'_', namerep):
+            controllist.append(namerep)
+        elif re.match('^'+test+'_', namerep) :
+            testlist.append(namerep)
+
+    controlcol = []
+    testcol = []
+
+    for namectrl in controllist :
+        controlcol.append('reads_'+namectrl)
+    for nametest in testlist :
+        testcol.append('reads_'+nametest)
+
+    return allrep,controlcol,testcol
+
+def add_reads(control,test,allrep,controlcol,testcol,finaldf,event='notIR'):
+    finaldf['junction_coords_simple'] = finaldf['junction_coords'].str.replace("^chr.*:", "")
+    finaldftotest = finaldf
+
+    adaptallrep = {}
+    ## keep only events of interest by comparing to the new df built ##
+    for key in allrep:
+        adaptallrep[key] = allrep[key].merge(finaldftotest,on=['lsv_id'])
+        adaptallrep[key]['start'] = adaptallrep[key]['start'].apply(str)
+        adaptallrep[key]['end'] = adaptallrep[key]['end'].apply(str)
+        adaptallrep[key]['junction_test'] = adaptallrep[key][['start', 'end']].agg('-'.join, axis=1)
+        adaptallrep[key] = adaptallrep[key][adaptallrep[key].apply(lambda x: x['junction_test'] in x['junction_coords'], axis=1)]
+        adaptallrep[key] = adaptallrep[key][(adaptallrep[key]['lsv_id'].isin(adaptallrep[key]['lsv_id']))]
+
+        if event == 'notIR' :
+            adaptallrep[key] = adaptallrep[key].drop(['start', 'end',
+            'positions', 'gene_name', 'gene_id', 'mean_dpsi_per_lsv_junction',
+            'probability_changing', 'probability_non_changing', control+'_mean_psi',
+            test+'_mean_psi', 'de_novo_junctions', 'strand', 'place_constitutive_exon',
+            'ES', 'A5SS', 'A3SS', 'skipped_exons_coords', 'junction_coords',
+            'baseMean', 'log2FoldChange', 'lfcSE', 'pvalue', 'padj','junction_coords_simple'],axis=1)
+        elif event == 'IR' :
+            adaptallrep[key] = adaptallrep[key].drop(['start', 'end',
+            'positions', 'gene_name', 'gene_id', 'mean_dpsi_per_lsv_junction',
+            'probability_changing', 'probability_non_changing', control+'_mean_psi',
+            test+'_mean_psi', 'de_novo_junctions', 'strand', 'place_constitutive_exon', 'ir_coords',
+            'IR', 'junction_coords','baseMean', 'log2FoldChange', 'lfcSE', 'pvalue',
+            'padj','junction_coords_simple'],axis=1)
+
+        finaldf = pd.merge(finaldf,adaptallrep[key],right_on=['lsv_id','junction_test'],left_on=['lsv_id','junction_coords_simple'],how='left')
+        finaldf = finaldf.drop(['junction_test'],axis=1)
+
+
+
+    finaldf[controlcol] = finaldf[controlcol].astype(str)
+    finaldf[testcol] = finaldf[testcol].astype(str)
+    finaldf['control_reads'] = finaldf[controlcol].agg('::'.join, axis=1)
+    finaldf['test_reads'] = finaldf[testcol].agg('::'.join, axis=1)
+    finaldf['reads_per_junctions_per_replicates(control|test)'] = finaldf[['control_reads', 'test_reads']].agg('|'.join, axis=1)
+    finaldf = finaldf.drop(controlcol,axis=1)
+    finaldf = finaldf.drop(testcol,axis=1)
+    finaldf = finaldf.drop(['control_reads','test_reads','junction_coords_simple'],axis=1)
+    if event == 'notIR' :
+        finaldf = finaldf[['gene_name', 'gene_id', 'lsv_id', 'mean_dpsi_per_lsv_junction',
+        'probability_changing', 'probability_non_changing', control+'_mean_psi',
+        test+'_mean_psi', 'reads_per_junctions_per_replicates(control|test)',
+        'de_novo_junctions', 'strand', 'place_constitutive_exon',
+        'ES', 'A5SS', 'A3SS', 'skipped_exons_coords', 'junction_coords',
+        'baseMean', 'log2FoldChange', 'lfcSE', 'pvalue', 'padj']]
+    elif event == 'IR' :
+        finaldf = finaldf[['gene_name', 'gene_id', 'lsv_id', 'mean_dpsi_per_lsv_junction',
+        'probability_changing', 'probability_non_changing', control+'_mean_psi',
+        test+'_mean_psi', 'reads_per_junctions_per_replicates(control|test)',
+        'de_novo_junctions', 'strand', 'place_constitutive_exon',
+        'IR', 'ir_coords', 'junction_coords',
+        'baseMean', 'log2FoldChange', 'lfcSE', 'pvalue', 'padj']]
+    return finaldf
+
+def get_only_X_event(control,test,fulldf1,fulldf2,eventtype,outputdir):
     if eventtype == 'ES' :
         dfES1 = fulldf1[fulldf1['ES'] == 'TRUE']
         dfES1 = remove_duplicates(dfES1)
@@ -239,26 +362,4 @@ def get_only_X_event(cond1,cond2,fulldf1,fulldf2,eventtype,outputdir):
         dfIR2.to_csv(outputdir+'IR/'+control+'_'+test+'_IR_02.tsv',header=1, sep='\t',index=False)
 
 if __name__ == "__main__":
-    scriptdir = os.path.dirname(os.path.realpath(__file__))
-    control = snakemake.params[0]
-    test = snakemake.params[1]
-    voilafile = scriptdir+'/../../results/Voila/'+control+'_'+test+'.tsv'
-    voilatsv = pandas.read_csv(voilafile, header=0, comment='#', sep='\t')
-    deseqfile = scriptdir+'/../../results/Diff_Exp/raw_counts_matrix.filtered.tsv'
-    deseq = pandas.read_csv(deseqfile,header=0,sep='\t')
-
-    fulldf,fulldfir = extract_events(voilatsv,control,test,deseq)
-
-    fulldf1 = remove_low_dpsi_and_proba(fulldf,0.1,0.9)
-    fulldf2 = remove_low_dpsi_and_proba(fulldf,0.2,0.9)
-
-    fulldfir1 = remove_low_dpsi_and_proba(fulldfir,0.1,0.9)
-    fulldfir2 = remove_low_dpsi_and_proba(fulldfir,0.2,0.9)
-
-    outputdir = scriptdir+'/../../results/Clean_AS_Event/'
-
-    get_only_X_event(control,test,fulldf1,fulldf2,'ES',outputdir)
-    get_only_X_event(control,test,fulldf1,fulldf2,'A5SS',outputdir)
-    get_only_X_event(control,test,fulldf1,fulldf2,'A3SS',outputdir)
-
-    get_only_X_event(control,test,fulldfir1,fulldfir2,'IR',outputdir)
+    main()
