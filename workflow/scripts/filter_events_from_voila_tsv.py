@@ -12,7 +12,7 @@ def main():
     test = snakemake.params[1]
     voilafile = scriptdir+'/../../results/Voila/'+control+'_'+test+'.tsv'
     voilatsv = pandas.read_csv(voilafile, header=0, comment='#', sep='\t')
-    deseqfile = scriptdir+'/../../results/Diff_Exp/raw_counts_matrix.filtered.tsv'
+    deseqfile = scriptdir+'/../../results/Diff_Exp/deseq2_results.tsv'
     deseq = pandas.read_csv(deseqfile,header=0,sep='\t')
     majiqfiles = glob.glob(scriptdir+'/../../results/MAJIQ/build_'+control+'_'+test+'/*.majiq')
 
@@ -219,6 +219,8 @@ def extract_events(voilatsv,cond1,cond2,deseq):
     fulldfir = pandas.merge(fulldfir,deseq,how='inner',left_on='gene_id',right_on='V2')
     fulldf = fulldf.drop(['V2'],axis=1)
     fulldfir = fulldfir.drop(['V2'],axis=1)
+
+    fulldf = fulldf[~fulldf.skipped_exons_coords.str.contains("nan",na=False)]
 
     return fulldf,fulldfir
 
