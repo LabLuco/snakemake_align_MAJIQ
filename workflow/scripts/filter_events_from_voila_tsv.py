@@ -1,6 +1,7 @@
 import pandas
 import numpy as np
 import re
+import os
 
 # LSV TYPE specified if it is about a target or a source exon such as : s|... or t|...
 # LSV TYPE may be composed of various splicing events defined as : AeB.CoD
