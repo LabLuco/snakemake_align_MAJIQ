@@ -15,4 +15,9 @@ rule deseq2:
         bash ../scripts/get_count_from_star.sh {params.gtf}
         python3 ./../scripts/samplesheet_and_keep_gene_interest.py -control {params.control} -test {params.test}
         Rscript ./../scripts/deseq2.R
+        mkdir -p ../../results/Clean_AS_Event/
+        mkdir -p ../../results/Clean_AS_Event/ES/
+        mkdir -p ../../results/Clean_AS_Event/A5SS/
+        mkdir -p ../../results/Clean_AS_Event/A3SS/
+        mkdir -p ../../results/Clean_AS_Event/IR/
         """
