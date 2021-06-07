@@ -249,7 +249,7 @@ def explore_majiq_files(control,test,majiqfiles):
         namerep = file.split('/')[-1].split('.majiq')[0]
 
         arrayrep = np.load(file)['junc_info']
-        dfrep = pd.DataFrame.from_records(arrayrep,columns=[])
+        dfrep = pandas.DataFrame.from_records(arrayrep,columns=[])
         dfrep.columns = ['lsv_id','start','end','reads_'+namerep,'positions']
         dfrep['lsv_id'] = dfrep['lsv_id'].map(lambda x: x.decode('UTF-8'))
         # dfrep['reads_'+namerep] = dfrep['reads_'+namerep].astype(int).astype(str)
@@ -300,7 +300,7 @@ def add_reads(control,test,allrep,controlcol,testcol,finaldf,event='notIR'):
             'IR', 'junction_coords','baseMean', 'log2FoldChange', 'lfcSE', 'pvalue',
             'padj','junction_coords_simple'],axis=1)
 
-        finaldf = pd.merge(finaldf,adaptallrep[key],right_on=['lsv_id','junction_test'],left_on=['lsv_id','junction_coords_simple'],how='left')
+        finaldf = pandas.merge(finaldf,adaptallrep[key],right_on=['lsv_id','junction_test'],left_on=['lsv_id','junction_coords_simple'],how='left')
         finaldf = finaldf.drop(['junction_test'],axis=1)
 
 
