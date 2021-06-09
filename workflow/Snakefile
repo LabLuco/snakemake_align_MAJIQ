@@ -9,6 +9,7 @@ include: "rules/voila_tsv.smk"
 include: "rules/tpmcalculator.smk"
 include: "rules/deseq2.smk"
 include: "rules/filter_events_from_voila_tsv.smk"
+include: "rules/remove_first_steps_files.smk"
 
 report: "report/workflow.rst"
 
