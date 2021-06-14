@@ -2,7 +2,7 @@ rule clean_directories:
     input:
         expand('../../results/Clean_AS_Event/ES/{control}_{test}_ES_02.tsv', control=config['Control'], test=config['Test'])
     output:
-        temp('../../results/finished.txt')
+        '../../results/finished.txt'
     shell:
         """
         rm -r -f ../../resources/fastq/

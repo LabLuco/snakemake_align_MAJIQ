@@ -16,15 +16,7 @@ report: "report/workflow.rst"
 workdir: "scripts/"
 rule all:
     input:
-        expand('../../results/TPM/{id}/{id}_Aligned.out.sorted_transcripts.out',id = config['Samplesid']),
-        expand('../../results/Clean_AS_Event/ES/{control}_{test}_ES_01.tsv', control=config['Control'], test=config['Test']),
-        expand('../../results/Clean_AS_Event/ES/{control}_{test}_ES_02.tsv', control=config['Control'], test=config['Test']),
-        expand('../../results/Clean_AS_Event/A5SS/{control}_{test}_A5SS_01.tsv', control=config['Control'], test=config['Test']),
-        expand('../../results/Clean_AS_Event/A5SS/{control}_{test}_A5SS_02.tsv', control=config['Control'], test=config['Test']),
-        expand('../../results/Clean_AS_Event/A3SS/{control}_{test}_A3SS_01.tsv', control=config['Control'], test=config['Test']),
-        expand('../../results/Clean_AS_Event/A3SS/{control}_{test}_A3SS_02.tsv', control=config['Control'], test=config['Test']),
-        expand('../../results/Clean_AS_Event/IR/{control}_{test}_IR_01.tsv', control=config['Control'], test=config['Test']),
-        expand('../../results/Clean_AS_Event/IR/{control}_{test}_IR_02.tsv', control=config['Control'], test=config['Test'])
+        '../../results/finished.txt'
 
 
 
