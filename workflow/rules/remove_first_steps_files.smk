@@ -7,7 +7,5 @@ rule clean_directories:
         """
         rm -r -f ../../resources/fastq/
         rm -r -f ../../resources/genome/
-        rm -r -f ../../results/trim_galore/
-        rm -r -f ../../results/alignment/
         touch ../../results/finished.txt
         """

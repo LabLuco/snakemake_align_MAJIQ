@@ -16,7 +16,8 @@ report: "report/workflow.rst"
 workdir: "scripts/"
 rule all:
     input:
-        '../../results/finished.txt'
+        '../../results/finished.txt',
+        expand('../../results/TPM/{id}/{id}_Aligned.out.sorted_transcripts.out',id = config['Samplesid'])
 
 
 
