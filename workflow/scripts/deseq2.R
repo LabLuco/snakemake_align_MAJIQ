@@ -30,7 +30,7 @@ norm_counts_symbols <- merge(unique(tx2gene[,2:3]), data.frame(ID=rownames(norm_
 write.table(norm_counts_symbols, "normalized_counts.tsv", quote=F, col.names=T, row.names=F, sep="\t")
 
 ###### VISUALIZATION ######
-vsd <- vst(se_star2,nsub=1)
+vsd <- varianceStabilizingTransformation(se_star2)
 
 ### samples correlation ###
 library(pheatmap)
