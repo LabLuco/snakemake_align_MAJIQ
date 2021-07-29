@@ -1,104 +1,87 @@
 # Snakemake workflow: snakemake_align_MAJIQ
 
 [![Snakemake](https://img.shields.io/badge/snakemake-≥5.7.0-brightgreen.svg)](https://snakemake.bitbucket.io)
-[![Build Status](https://travis-ci.org/snakemake-workflows/snakemake_align_MAJIQ.svg?branch=master)](https://travis-ci.org/snakemake-workflows/snakemake_align_MAJIQ)
-
-This is the template for a new Snakemake workflow. Replace this text with a comprehensive description covering the purpose and domain.
-Insert your code into the respective folders, i.e. `scripts`, `rules`, and `envs`. Define the entry point of the workflow in the `Snakefile` and the main configuration in the `config.yaml` file.
 
 ## Authors
 
-* Elsa CLAUDE (@elsaclaude)
+* Elsa CLAUDE (https://github.com/ElsaClaude)
 
-## Usage
+## About the pipeline
 
-If you use this workflow in a paper, don't forget to give credits to the authors by citing the URL of this (original) repository and, if available, its DOI (see above).
+This is the snakemake pipeline in order to process RNAseq paired-end fastq files to analyze splicing events using MAJIQ software (https://majiq.biociphers.org/).
+The pipeline involves use of :
+* FastQC
+* Trimgalore
+* STAR alignment
+* DESEQ2
+* MAJIQ
+* Voila software (link to MAJIQ results)
 
-### Step 1: Obtain a copy of this workflow
+All of this is wrap in the pipeline using python/bash/R scripts. Check workflow/rules and workflow/scripts to better understand how it processed.
 
-1. Create a new github repository using this workflow [as a template](https://help.github.com/en/articles/creating-a-repository-from-a-template).
-2. [Clone](https://help.github.com/en/articles/cloning-a-repository) the newly created repository to your local system, into the place where you want to perform the data analysis.
+To be able to reproduce results, the pipeline have been included in a singularity container. See : https://github.com/LabLuco/build_singularity_MAJIQ
 
-### Step 2: Configure workflow
+## Steps to run the pipeline
+### 1. Pull img
 
-Configure the workflow according to your needs via editing the files in the `config/` folder. Adjust `config.yaml` to configure the workflow execution, and `samples.tsv` to specify your sample setup.
+Create a batch file to pull the img automatically.
+Example on the genotoul bioinfo servers : 
+```bash
+#!/bin/bash
+#SBATCH -J pull_img
+#SBATCH -o pull_img.out
+#SBATCH -e pull_img.out
+#SBATCH -t 00:20:00
+#SBATCH --mem=8G
+module load system/singularity-3.0.1
+cd /home/eclaude/work
+singularity pull library://labluco/default/quality_align_majiq:latest
+```
 
-### Step 3: Install Snakemake
+### 2. Prepare the data
 
-Install Snakemake using [conda](https://conda.io/projects/conda/en/latest/user-guide/install/index.html):
+Put your RNA-seq paire-end raw_data (fastq.gz) in a folder.
+Same with an indexed genome with STAR. (check archive2/common/Elsa/ folder to get one)
 
-    conda create -c bioconda -c conda-forge -n snakemake snakemake
+### 3. Run the pipeline
 
-For installation details, see the [instructions in the Snakemake documentation](https://snakemake.readthedocs.io/en/stable/getting_started/installation.html).
+Create a batch file to execute the singularity image to run the pipeline. Here is a minimal one.
 
-### Step 4: Execute workflow
+```bash
+#!/bin/bash
+#SBATCH -t 03:00:00
+#SBATCH --mem=20G
+module load system/singularity-3.7.3
+cd /home/eclaude/work
+cp quality_align_majiq_latest.sif tmp_$1
+mkdir $1
+cd $1/
+singularity run --bind $2:/softwares/snakemake_align_MAJIQ/resources/fastq --bind $3:/softwares/snakemake_align_MAJIQ/resources/genome ../tmp_$1
+rm ../tmp_$1
+```
 
-Activate the conda environment:
+This script allows you to :
+* load the singularity module
+* create a folder for the new analysis
+* copy/paste the singularity img to be able to run multiple analysis in parallel
+* run the singularity container with binded folders (raw data and genome)
 
-    conda activate snakemake
+The script needs arguments. The associated bash command line can be :
 
-Test your configuration by performing a dry-run via
+```bash
+sbatch --error=name_test.err --output=name_test.err --job-name=name_test majiq.sh "name_test" "/home/eclaude/work/raw_data/" "/home/eclaude/work/genome/"
+```
+### 4. Get the results
+All results will be stored in the newly created folder /snakemake_align_MAJIQ/results/.
+Check the Clean_AS_Event folder for clean results files.
 
-    snakemake --use-conda -n
+## Notes and warnings
 
-Execute the workflow locally via
+The container copy all files to a path that can be modified. You can of course change that way of doing (which is really heavy) in the singularity building file (https://github.com/LabLuco/build_singularity_MAJIQ).
 
-    snakemake --use-conda --cores $N
+Unfortunatly, the pipeline has not been optimized to support single-end data. Some changes might be needed.
+Also, some parameters might be pass by the user instead of being hard coded in the pipeline (check workflow/rules and workflow/scripts files) :
+* number of thread to use (set to 10 for now in some scripts as STAR and MAJIQ analysis)
 
-using `$N` cores or run it in a cluster environment via
-
-    snakemake --use-conda --cluster qsub --jobs 100
-
-or
-
-    snakemake --use-conda --drmaa --jobs 100
-
-If you not only want to fix the software stack but also the underlying OS, use
-
-    snakemake --use-conda --use-singularity
-
-in combination with any of the modes above.
-See the [Snakemake documentation](https://snakemake.readthedocs.io/en/stable/executable.html) for further details.
-
-### Step 5: Investigate results
-
-After successful execution, you can create a self-contained interactive HTML report with all results via:
-
-    snakemake --report report.html
-
-This report can, e.g., be forwarded to your collaborators.
-An example (using some trivial test data) can be seen [here](https://cdn.rawgit.com/snakemake-workflows/rna-seq-kallisto-sleuth/master/.test/report.html).
-
-### Step 6: Commit changes
-
-Whenever you change something, don't forget to commit the changes back to your github copy of the repository:
-
-    git commit -a
-    git push
-
-### Step 7: Obtain updates from upstream
-
-Whenever you want to synchronize your workflow copy with new developments from upstream, do the following.
-
-1. Once, register the upstream repository in your local copy: `git remote add -f upstream git@github.com:snakemake-workflows/snakemake_align_MAJIQ.git` or `git remote add -f upstream https://github.com/snakemake-workflows/snakemake_align_MAJIQ.git` if you do not have setup ssh keys.
-2. Update the upstream version: `git fetch upstream`.
-3. Create a diff with the current version: `git diff HEAD upstream/master workflow > upstream-changes.diff`.
-4. Investigate the changes: `vim upstream-changes.diff`.
-5. Apply the modified diff via: `git apply upstream-changes.diff`.
-6. Carefully check whether you need to update the config files: `git diff HEAD upstream/master config`. If so, do it manually, and only where necessary, since you would otherwise likely overwrite your settings and samples.
-
-
-### Step 8: Contribute back
-
-In case you have also changed or added steps, please consider contributing them back to the original repository:
-
-1. [Fork](https://help.github.com/en/articles/fork-a-repo) the original repo to a personal or lab account.
-2. [Clone](https://help.github.com/en/articles/cloning-a-repository) the fork to your local system, to a different place than where you ran your analysis.
-3. Copy the modified files from your analysis to the clone of your fork, e.g., `cp -r workflow path/to/fork`. Make sure to **not** accidentally copy config file contents or sample sheets. Instead, manually update the example config files if necessary.
-4. Commit and push your changes to your fork.
-5. Create a [pull request](https://help.github.com/en/articles/creating-a-pull-request) against the original repository.
-
-## Testing
-
-Test cases are in the subfolder `.test`. They are automatically executed via continuous integration with [Github Actions](https://github.com/features/actions).
-
+The pipeline is supposed to work on any servers. It only needs a recent version of singularity ( >= 3.7 if possible).
+The pipeline has been used on the Genotoul Bioinfo servers. Tests have been made on the IGH Lakitu server but there are conflicts with the R libraries (they are aware of it, maybe it will be fixed ?)
